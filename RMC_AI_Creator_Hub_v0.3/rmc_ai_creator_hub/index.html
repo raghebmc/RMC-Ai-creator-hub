@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RMC AI Creator Hub</title>
+<style>
+:root{--bg:#03070f;--panel:#07111f;--panel2:#0a1628;--line:#12345a;--blue:#168cff;--blue2:#54b5ff;--text:#eef7ff;--muted:#7f9bb8;--danger:#ff5577}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 50% -10%,#0d3158 0,#050b15 38%,#02050b 100%);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(22,140,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(22,140,255,.035) 1px,transparent 1px);background-size:45px 45px}
+.app{display:flex;min-height:100vh}.side{width:245px;border-right:1px solid #0e2744;background:rgba(3,9,17,.9);padding:22px 15px;position:fixed;inset:0 auto 0 0;z-index:3}
+.logo{font-size:23px;font-weight:900;letter-spacing:1px;margin:3px 10px 5px}.logo span{color:var(--blue2)}.tag{color:#587692;font-size:11px;margin:0 10px 25px}
+.nav{display:grid;gap:7px}.nav button{background:transparent;border:1px solid transparent;color:#9eb5ca;text-align:left;padding:11px 12px;border-radius:10px;cursor:pointer;font-size:14px}.nav button:hover,.nav button.active{background:#09203a;border-color:#124777;color:#fff;box-shadow:0 0 18px #006dff14}
+.nav small{display:block;color:#44627e;margin:18px 10px 5px;text-transform:uppercase;letter-spacing:1.5px;font-size:9px}
+.main{margin-left:245px;width:calc(100% - 245px);padding:28px 34px 50px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.crumb{color:#66839f;font-size:13px}.profile{border:1px solid #163b62;background:#071426;padding:8px 12px;border-radius:10px;color:#bcd5ea}
+.hero{border:1px solid #124777;border-radius:18px;padding:28px;background:linear-gradient(135deg,#081a2f,#06101d 55%,#0b2440);box-shadow:0 0 50px #007bff0d;position:relative;overflow:hidden}.hero:after{content:"AI";position:absolute;right:30px;top:-35px;font-size:180px;font-weight:900;color:#0d3155;opacity:.25}.hero h1{margin:0 0 9px;font-size:34px}.hero h1 b{color:var(--blue2)}.hero p{margin:0;color:#91abc2;max-width:650px;line-height:1.6}.search{margin-top:22px;display:flex;gap:10px}.search input{flex:1;background:#040b14;border:1px solid #16416b;color:white;padding:13px 15px;border-radius:10px;outline:none}.btn{background:linear-gradient(135deg,#0878ed,#21a3ff);color:white;border:0;border-radius:10px;padding:12px 18px;font-weight:800;cursor:pointer;box-shadow:0 8px 25px #007bff25}.btn:hover{filter:brightness(1.1)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:22px}.card{background:linear-gradient(180deg,#081523,#050d18);border:1px solid #102f4e;border-radius:14px;padding:18px;cursor:pointer;transition:.18s}.card:hover{transform:translateY(-3px);border-color:#1d72b8;box-shadow:0 10px 30px #007bff16}.ico{width:39px;height:39px;border-radius:10px;display:grid;place-items:center;background:#092443;color:#55b8ff;font-size:19px;margin-bottom:12px}.card h3{font-size:15px;margin:0 0 7px}.card p{font-size:12px;color:#7692aa;line-height:1.45;margin:0}.suggest-action{margin-top:14px;color:#42aaff;font-size:11px;font-weight:800}.section{margin-top:30px}.sectionhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.section h2{font-size:19px;margin:0}.muted{color:#607b94;font-size:12px}
+.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.tool{padding:15px;border:1px solid #102b46;background:#07111d;border-radius:12px;display:flex;gap:12px;align-items:center;cursor:pointer}.tool:hover{border-color:#1b6cac}.tool .mini{font-size:18px}.tool strong{font-size:13px}.tool div span{display:block;color:#607b94;font-size:11px;margin-top:3px}
+.modal{position:fixed;inset:0;background:#0009;backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}.modal.show{display:flex}.box{width:min(850px,100%);max-height:90vh;overflow:auto;background:#07111d;border:1px solid #18578d;border-radius:18px;padding:24px;box-shadow:0 30px 90px #000}.boxhead{display:flex;justify-content:space-between;align-items:center}.close{background:#0d1d2f;color:#9db6cc;border:1px solid #173b5d;border-radius:8px;padding:7px 10px;cursor:pointer}.field{margin-top:15px}.field label{display:block;color:#9bb4ca;font-size:12px;margin-bottom:7px}.field input,.field textarea,.field select{width:100%;background:#030a12;color:#edf7ff;border:1px solid #163a5d;border-radius:9px;padding:11px;outline:none}.field textarea{min-height:120px;resize:vertical}.output{margin-top:15px;background:#030911;border:1px solid #12324f;border-radius:10px;padding:15px;white-space:pre-wrap;color:#cce6fb;line-height:1.55;min-height:80px}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.chip{background:#09213a;border:1px solid #154a76;color:#75bfff;border-radius:20px;padding:6px 9px;font-size:11px}
+.settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.setting-card{background:linear-gradient(180deg,#081523,#050d18);border:1px solid #102f4e;border-radius:14px;padding:18px}.setting-card h3{margin:0 0 6px;font-size:15px}.setting-card p{margin:0 0 14px;color:#7692aa;font-size:12px;line-height:1.5}.setting-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:11px 0;border-top:1px solid #0d263e}.setting-row:first-child{border-top:0}.setting-row label{font-size:13px;color:#c7d8e8}.setting-row small{display:block;color:#607b94;font-size:10px;margin-top:3px}.control{background:#030a12;color:#eaf5ff;border:1px solid #173d60;border-radius:8px;padding:8px 10px;outline:none;min-width:135px}.toggle{appearance:none;width:40px;height:22px;border-radius:99px;background:#142a3f;border:1px solid #245174;position:relative;cursor:pointer}.toggle:after{content:"";position:absolute;width:16px;height:16px;top:2px;left:2px;border-radius:50%;background:#7190a8;transition:.18s}.toggle:checked{background:#0878ed}.toggle:checked:after{left:20px;background:#fff}.danger{border-color:#5b1c2c!important;color:#ff8ca5!important;background:#180a11!important}.settings-note{margin-top:16px;padding:12px;border:1px dashed #1a4164;border-radius:10px;color:#7190aa;font-size:11px}.rtl{direction:rtl}.rtl .side{left:auto;right:0;border-right:0;border-left:1px solid #0e2744}.rtl .main{margin-left:0;margin-right:245px}.rtl .nav button{text-align:right}.rtl .top{direction:rtl}.rtl .search{direction:rtl}.rtl .field{text-align:right}.rtl .setting-row{direction:rtl}.rtl .setting-row label{text-align:right}@media(max-width:720px){.rtl .main{margin-right:70px;margin-left:0}} 
+@media(max-width:1050px){.grid{grid-template-columns:repeat(2,1fr)}.tools{grid-template-columns:repeat(2,1fr)}.settings-grid{grid-template-columns:1fr}}@media(max-width:720px){.side{width:70px;padding:14px 8px}.logo{font-size:15px;margin:5px}.tag,.nav small,.nav button span{display:none}.nav button{text-align:center}.main{margin-left:70px;width:calc(100% - 70px);padding:20px 14px}.grid,.tools{grid-template-columns:1fr}.hero h1{font-size:27px}}
+.compact .main{padding-top:18px}.compact .card{padding:12px}.compact .tool{padding:10px}.compact .section{margin-top:20px}
+body[data-theme="dark"]{background:#02050a}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="logo">RMC <span>AI</span></div><div class="tag">CREATOR HUB · v0.1</div>
+  <div class="nav">
+    <button class="active" data-page="home">⌂ <span>Dashboard</span></button>
+    <button data-page="youtube">▶ <span>YouTube Tools</span></button>
+    <button data-page="content">✦ <span>Content Ideas</span></button>
+    <button data-page="script">▤ <span>Script Generator</span></button>
+    <button data-page="thumb">▣ <span>Thumbnail Studio</span></button>
+    <button data-page="image">◉ <span>Image Tools</span></button>
+    <button data-page="video">◈ <span>Video Tools</span></button>
+    <button data-page="audio">◉ <span>Voice & Audio</span></button>
+    <button data-page="chat">● <span>AI Chat</span></button>
+    <small>More</small>
+    <button data-page="seo">⌁ <span>SEO Tools</span></button>
+    <button data-page="productivity">✓ <span>Productivity</span></button>
+    <button data-page="learn">◆ <span>Learning</span></button>
+    <button data-page="settings">⚙ <span>Settings</span></button>
+  </div>
+</aside>
+<main class="main">
+  <div class="top"><div class="crumb">RMC AI Creator Hub / <span id="crumb">Dashboard</span></div><div class="profile">RMC Creator</div></div>
+  <section class="hero">
+    <h1>Turn ideas into <b>content.</b></h1>
+    <p>One creator workspace for ideas, scripts, thumbnails, images, videos, SEO, audio, productivity and more — powered by AI.</p>
+    <div class="search"><input id="quick" placeholder="What do you want to create today?"><button class="btn" onclick="quickGenerate()">Generate ✦</button></div>
+  </section>
+  <div class="grid" id="cards"></div>
+  <section class="section"><div class="sectionhead"><h2>All tools</h2><span class="muted">Built to grow with RMC</span></div><div class="tools" id="tools"></div></section>
+</main>
+</div>
+<div class="modal" id="modal"><div class="box"><div class="boxhead"><h2 id="mtitle">Tool</h2><button class="close" onclick="closeModal()">✕</button></div><div id="mbody"></div></div></div>
+<script>
+const categories=[
+["youtube","▶","YouTube Tools","Titles, descriptions, tags, video ideas and growth helpers."],
+["content","✦","Content Ideas","Never run out of ideas for YouTube, TikTok, Instagram and more."],
+["script","▤","Script Generator","Turn a topic into a structured, engaging script."],
+["thumb","▣","Thumbnail Studio","Thumbnail concepts, text hooks, layouts and prompts."],
+["image","◉","Image Tools","Prompts and concepts for images, posters and creator graphics."],
+["video","◈","Video Tools","Shorts ideas, shot lists, captions and editing plans."],
+["audio","◉","Voice & Audio","Voice scripts, narration plans, sound ideas and audio workflows."],
+["chat","●","AI Chat","Brainstorm, ask questions, improve ideas and plan projects."],
+["seo","⌁","SEO Tools","Keywords, searchable titles, descriptions and tags."],
+["productivity","✓","Productivity","Tasks, project plans, calendars and creator workflows."],
+["learn","◆","Learning","Learn tools, editing, AI, content strategy and creator skills."]
+];
+const tools=[
+["YouTube Title Generator","Generate clickable titles","youtube"],["Video Description","Create a ready-to-edit description","youtube"],["Hashtag Generator","Platform-specific hashtag sets","seo"],["Content Idea Machine","Generate fresh ideas by niche","content"],["Shorts Idea Generator","Hooks + concepts for short videos","content"],["Script Builder","Outline to full script","script"],["Hook Generator","Make the first seconds stronger","script"],["Thumbnail Concept","Text + composition concept","thumb"],["Thumbnail Prompt","Create an AI-image prompt","thumb"],["Image Prompt Builder","Build detailed visual prompts","image"],["Video Shot List","Plan shots scene by scene","video"],["Shorts Planner","Hook → scenes → CTA","video"],["Narration Writer","Natural voice-over script","audio"],["AI Brainstorm","Work through an idea with AI","chat"],["SEO Keyword Ideas","Find keyword directions","seo"],["Creator Roadmap","Turn a goal into steps","productivity"],["Project Planner","Plan a complete content project","productivity"],["Learn a Skill","Build a learning path","learn"],["Translator","Translate creator content","chat"],["Code Helper","Explain or generate code","chat"],["Business Idea Lab","Turn an idea into a business model","productivity"],["File Converter","Plan a file workflow","productivity"]
+];
+const icons={youtube:"▶",content:"✦",script:"▤",thumb:"▣",image:"◉",video:"◈",audio:"◉",chat:"●",seo:"⌁",productivity:"✓",learn:"◆"};
+const $=s=>document.querySelector(s);
+function render(){
+ $("#cards").innerHTML=categories.map(c=>`<div class="card" onclick="openTool('${c[0]}')"><div class="ico">${c[1]}</div><h3>${c[2]}</h3><p>${c[3]}</p></div>`).join("");
+ $("#tools").innerHTML=tools.map(t=>`<div class="tool" onclick="openTool('${t[2]}','${t[0]}')"><div class="mini">${icons[t[2]]||"✦"}</div><div><strong>${t[0]}</strong><span>${t[1]}</span></div></div>`).join("");
+}
+const suggestions={
+youtube:[
+["🔥 Generate 10 Video Titles","Give me 10 clickable titles for my next video","youtube"],
+["📝 Improve My Title","Make my existing title stronger without clickbait","youtube"],
+["📄 YouTube Description","Create a complete description with keywords and CTA","youtube"],
+["#️⃣ Hashtags","Generate relevant YouTube hashtags for my niche","seo"],
+["📈 Video Growth Ideas","Give me practical ways to improve this video's views","youtube"]
+],
+content:[
+["💡 Give Me Ideas","Generate 20 fresh ideas for my channel","content"],
+["🎮 Gaming Ideas","Find unique gaming video ideas that aren't repetitive","content"],
+["📦 Unboxing Ideas","Give me creative unboxing formats and hooks","content"],
+["⚡ Shorts Ideas","Give me 15 short-form ideas with strong hooks","video"],
+["🔥 Trending Concepts","Turn my niche into fresh concepts people may click","content"]
+],
+script:[
+["🎬 Full Script","Turn my idea into a complete YouTube script","script"],
+["⚡ Strong Hook","Write 10 hooks for the first 5 seconds","script"],
+["📖 Story Structure","Build the beginning, middle and ending","script"],
+["🗣️ Natural Arabic Script","Write it in casual, natural Arabic","script"],
+["✂️ Shorten My Script","Make my script faster and remove boring parts","script"]
+],
+thumb:[
+["🖼️ Thumbnail Idea","Create 5 thumbnail concepts for my video","thumb"],
+["✍️ Thumbnail Text","Give me short, powerful thumbnail text","thumb"],
+["🎨 AI Image Prompt","Create a detailed prompt for the thumbnail","image"],
+["📐 Thumbnail Layout","Tell me where to place the subject and text","thumb"],
+["🚫 Fix My Thumbnail","Find what could make my thumbnail less clickable","thumb"]
+],
+image:[
+["✨ Create Image Prompt","Turn my idea into a detailed AI image prompt","image"],
+["🎮 Gaming Artwork","Create a realistic gaming artwork concept","image"],
+["📱 Social Media Graphic","Create a post/banner concept","image"],
+["🧑‍💻 Creator Branding","Generate visual branding ideas for my channel","image"],
+["🖼️ Background Generator","Create background concepts for thumbnails","image"]
+],
+video:[
+["🎬 Video Plan","Build a complete shot-by-shot video plan","video"],
+["📱 Shorts Planner","Plan a 30–60 second Short","video"],
+["✂️ Editing Plan","Tell me where to cut, zoom, caption and add effects","video"],
+["🎥 B-Roll Ideas","Suggest B-roll for every part of my video","video"],
+["🚀 Strong Opening","Create an opening designed to keep viewers watching","video"]
+],
+audio:[
+["🎙️ Voice-over","Write a natural narration for my video","audio"],
+["🔊 Sound Effects","Suggest sound effects for each scene","audio"],
+["🎵 Music Direction","Suggest the type of music that fits my video","audio"],
+["🗣️ Natural Delivery","Rewrite my script to sound less robotic","audio"],
+["🎧 Audio Checklist","Help me make my recording sound cleaner","audio"]
+],
+chat:[
+["🧠 Brainstorm With AI","Let's develop my idea together","chat"],
+["💼 Business Idea","Turn my idea into a possible business","productivity"],
+["❓ Ask AI Anything","Ask questions about content, gaming or AI","chat"],
+["🔍 Analyze My Idea","Find strengths, weaknesses and opportunities","chat"],
+["🚀 Next Step","Tell me exactly what I should do next","chat"]
+],
+seo:[
+["🔎 Find Keywords","Generate keyword ideas for my topic","seo"],
+["🏷️ Tags","Create a relevant tag list","seo"],
+["📊 SEO Title","Make a searchable but clickable title","seo"],
+["📝 SEO Description","Write a description around my keywords","seo"],
+["#️⃣ Hashtag Pack","Generate a clean hashtag pack","seo"]
+],
+productivity:[
+["📅 Creator Plan","Make a weekly content plan","productivity"],
+["✅ Task List","Turn my idea into clear tasks","productivity"],
+["🚀 Launch Plan","Plan how to launch my project","productivity"],
+["💰 Monetization Plan","Find realistic ways this project could make money","productivity"],
+["🗺️ Roadmap","Create a 30-day roadmap","productivity"]
+],
+learn:[
+["🎓 Learning Plan","Build a step-by-step learning path","learn"],
+["💻 Learn AI","Teach me the useful AI skills I need","learn"],
+["🎬 Learn Editing","Build an editing roadmap from beginner to advanced","learn"],
+["📈 Learn YouTube","Teach me the important creator skills","learn"],
+["🧩 Explain Something","Explain any topic simply with examples","learn"]
+]
+};
+
+const i18n={
+ en:{
+  dashboard:"Dashboard",settings:"Settings",general:"General",appearance:"Appearance",account:"Account & Privacy",ai:"AI Preferences",
+  language:"Language",languageDesc:"Choose the language used across RMC AI Creator Hub.",theme:"Theme",themeDesc:"Choose how the workspace looks.",
+  notifications:"Notifications",notificationsDesc:"Show helpful product and project notifications.",autosave:"Auto-save",autosaveDesc:"Save drafts and preferences automatically in this browser.",
+  compact:"Compact mode",compactDesc:"Use a tighter interface with less spacing.",startup:"Startup page",startupDesc:"Choose the section that opens when you start.",
+  tone:"AI response style",toneDesc:"Choose the default style for generated results.",history:"Save generation history",historyDesc:"Keep generated results locally so you can revisit them.",
+  accountTitle:"Local account",accountDesc:"Your prototype data is stored locally in this browser for now.",
+  username:"Creator name",usernameDesc:"Displayed in your workspace.",privacy:"Privacy",privacyDesc:"No account or cloud sync is connected in this prototype.",
+  save:"Save settings",saved:"Saved",reset:"Reset settings",clear:"Clear local history",dangerText:"This removes locally saved prototype data from this browser.",
+  english:"English",arabic:"العربية",dark:"Dark",midnight:"Midnight Blue",home:"Dashboard",content:"Content Ideas",
+  youtube:"YouTube Tools",script:"Script Generator",thumb:"Thumbnail Studio",image:"Image Tools",video:"Video Tools",
+  audio:"Voice & Audio",chat:"AI Chat",seo:"SEO Tools",productivity:"Productivity",learn:"Learning",
+  creative:"Creative",professional:"Professional",concise:"Concise",welcome:"Your creator workspace.",suggestions:"Smart suggestions",
+  more:"More",allTools:"All tools",built:"Built to grow with RMC",tryIt:"Try it →"
+ },
+ ar:{
+  dashboard:"لوحة التحكم",settings:"الإعدادات",general:"عام",appearance:"المظهر",account:"الحساب والخصوصية",ai:"تفضيلات الذكاء الاصطناعي",
+  language:"اللغة",languageDesc:"اختر اللغة المستخدمة في منصة RMC AI Creator Hub.",theme:"المظهر",themeDesc:"اختر شكل المنصة.",
+  notifications:"الإشعارات",notificationsDesc:"إظهار الإشعارات المفيدة للمشاريع والمنصة.",autosave:"الحفظ التلقائي",autosaveDesc:"حفظ المسودات والتفضيلات تلقائيًا على هذا المتصفح.",
+  compact:"الوضع المضغوط",compactDesc:"واجهة أصغر بمسافات أقل.",startup:"صفحة البداية",startupDesc:"اختر القسم الذي يفتح عند تشغيل المنصة.",
+  tone:"أسلوب رد الذكاء الاصطناعي",toneDesc:"اختر الأسلوب الافتراضي للنتائج التي يتم توليدها.",history:"حفظ سجل التوليد",historyDesc:"احتفظ بالنتائج محليًا لتعود إليها لاحقًا.",
+  accountTitle:"الحساب المحلي",accountDesc:"بيانات النسخة التجريبية محفوظة محليًا على هذا المتصفح حاليًا.",
+  username:"اسم المنشئ",usernameDesc:"يظهر داخل مساحة عملك.",privacy:"الخصوصية",privacyDesc:"لا يوجد حساب سحابي أو مزامنة في هذه النسخة التجريبية.",
+  save:"حفظ الإعدادات",saved:"تم الحفظ",reset:"إعادة ضبط الإعدادات",clear:"مسح السجل المحلي",dangerText:"سيؤدي هذا إلى حذف بيانات النسخة التجريبية المحفوظة على هذا المتصفح.",
+  english:"English",arabic:"العربية",dark:"داكن",midnight:"أزرق ليلي",home:"الرئيسية",content:"أفكار المحتوى",
+  youtube:"أدوات يوتيوب",script:"مولد السكربت",thumb:"استوديو الصور المصغرة",image:"أدوات الصور",video:"أدوات الفيديو",
+  audio:"الصوت",chat:"دردشة AI",seo:"أدوات SEO",productivity:"الإنتاجية",learn:"التعلّم",
+  creative:"إبداعي",professional:"احترافي",concise:"مختصر",welcome:"مساحة عملك كصانع محتوى.",suggestions:"اقتراحات ذكية",
+  more:"المزيد",allTools:"كل الأدوات",built:"مصممة لتكبر مع RMC",tryIt:"جرّبها ←"
+ }
+};
+let lang=localStorage.getItem("rmc_lang")||"en";
+let settings=JSON.parse(localStorage.getItem("rmc_settings")||"null")||{
+ theme:"midnight",notifications:true,autosave:true,compact:false,startup:"content",tone:"creative",history:true,username:"RMC Creator"
+};
+function t(k){return (i18n[lang]&&i18n[lang][k])||i18n.en[k]||k}
+function applyLanguage(){
+ document.documentElement.lang=lang;
+ document.body.classList.toggle("rtl",lang==="ar");
+ const user=document.querySelector(".profile"); if(user) user.textContent=settings.username||"RMC Creator";
+ document.querySelectorAll(".nav button").forEach(b=>{
+   const key=b.dataset.page;
+   const s=b.querySelector("span"); if(s) s.textContent=t(key==="home"?"home":key);
+ });
+ const more=document.querySelector(".nav small"); if(more) more.textContent=t("more");
+}
+function renderSettings(){
+ $("#crumb").textContent=t("settings");
+ $("#cards").innerHTML=`
+ <div class="settings-grid" style="grid-column:1/-1">
+  <div class="setting-card"><h3>⚙ ${t("general")}</h3>
+   <p>${t("languageDesc")}</p>
+   <div class="setting-row"><label>${t("language")}<small>${t("languageDesc")}</small></label>
+    <select id="langSelect" class="control" onchange="changeLanguage(this.value)"><option value="en">${t("english")}</option><option value="ar">${t("arabic")}</option></select></div>
+   <div class="setting-row"><label>${t("startup")}<small>${t("startupDesc")}</small></label>
+    <select id="startupSelect" class="control" onchange="settings.startup=this.value"><option value="content">${t("content")}</option><option value="youtube">${t("youtube")}</option><option value="chat">${t("chat")}</option><option value="productivity">${t("productivity")}</option></select></div>
+   <div class="setting-row"><label>${t("notifications")}<small>${t("notificationsDesc")}</small></label><input id="notif" class="toggle" type="checkbox" onchange="settings.notifications=this.checked"></div>
+   <div class="setting-row"><label>${t("autosave")}<small>${t("autosaveDesc")}</small></label><input id="auto" class="toggle" type="checkbox" onchange="settings.autosave=this.checked"></div>
+  </div>
+  <div class="setting-card"><h3>◐ ${t("appearance")}</h3>
+   <p>${t("themeDesc")}</p>
+   <div class="setting-row"><label>${t("theme")}<small>${t("themeDesc")}</small></label>
+    <select id="themeSelect" class="control" onchange="settings.theme=this.value;applyTheme()"><option value="midnight">${t("midnight")}</option><option value="dark">${t("dark")}</option></select></div>
+   <div class="setting-row"><label>${t("compact")}<small>${t("compactDesc")}</small></label><input id="compact" class="toggle" type="checkbox" onchange="settings.compact=this.checked;applyCompact()"></div>
+  </div>
+  <div class="setting-card"><h3>✦ ${t("ai")}</h3>
+   <p>${t("toneDesc")}</p>
+   <div class="setting-row"><label>${t("tone")}<small>${t("toneDesc")}</small></label>
+    <select id="toneSelect" class="control" onchange="settings.tone=this.value"><option value="creative">${t("creative")}</option><option value="professional">${t("professional")}</option><option value="concise">${t("concise")}</option></select></div>
+   <div class="setting-row"><label>${t("history")}<small>${t("historyDesc")}</small></label><input id="history" class="toggle" type="checkbox" onchange="settings.history=this.checked"></div>
+  </div>
+  <div class="setting-card"><h3>👤 ${t("account")}</h3>
+   <p>${t("accountDesc")}</p>
+   <div class="setting-row"><label>${t("username")}<small>${t("usernameDesc")}</small></label><input id="username" class="control" value="${(settings.username||"").replace(/"/g,"&quot;")}"></div>
+   <div class="setting-row"><label>${t("privacy")}<small>${t("privacyDesc")}</small></label><span class="chip">Local prototype</span></div>
+   <button class="btn" style="margin-top:12px" onclick="saveSettings()">✓ ${t("save")}</button>
+   <button class="close danger" style="margin-top:12px;margin-left:7px" onclick="resetSettings()">↻ ${t("reset")}</button>
+   <div class="settings-note">${t("dangerText")} <button class="close danger" onclick="clearHistory()" style="float:right">${t("clear")}</button></div>
+  </div>
+ </div>`;
+ $("#tools").innerHTML="";
+ $("#langSelect").value=lang; $("#startupSelect").value=settings.startup; $("#notif").checked=settings.notifications;
+ $("#auto").checked=settings.autosave; $("#themeSelect").value=settings.theme; $("#compact").checked=settings.compact;
+ $("#toneSelect").value=settings.tone; $("#history").checked=settings.history;
+ applyTheme(); applyCompact();
+}
+function renderPage(page,specific){
+ if(page==="settings"){renderSettings();return}
+ const cat=categories.find(c=>c[0]===page)||categories[0];
+ $("#crumb").textContent=lang==="ar"?t(page):cat[2];
+ const list=suggestions[page]||suggestions.chat;
+ $("#cards").innerHTML=list.map((s,i)=>`
+   <div class="card suggestion" onclick="openTool('${s[2]}','${s[0].replace(/'/g,"\\'")}')">
+     <div class="ico">${i===0?"✦":icons[s[2]]||"✦"}</div>
+     <h3>${lang==="ar"?arabicSuggestion(s[0]):s[0]}</h3>
+     <p>${lang==="ar"?arabicSuggestion(s[1]):s[1]}</p>
+     <div class="suggest-action">${t("tryIt")}</div>
+   </div>`).join("");
+ $("#tools").innerHTML=tools.filter(tl=>tl[2]===page||page==="chat").slice(0,8).map(tl=>`
+   <div class="tool" onclick="openTool('${tl[2]}','${tl[0]}')">
+     <div class="mini">${icons[tl[2]]||"✦"}</div>
+     <div><strong>${tl[0]}</strong><span>${tl[1]}</span></div>
+   </div>`).join("");
+ if(!$("#tools").innerHTML) $("#tools").innerHTML=`<div class="tool" style="grid-column:1/-1"><div class="mini">✦</div><div><strong>More tools are coming</strong><span>We're building this section to become much bigger.</span></div></div>`;
+ applyLanguage();
+}
+function arabicSuggestion(s){
+ const map={
+ "🔥 Generate 10 Video Titles":"🔥 ولّد 10 عناوين للفيديو",
+ "📝 Improve My Title":"📝 حسّن عنوان الفيديو",
+ "📄 YouTube Description":"📄 وصف يوتيوب جاهز",
+ "#️⃣ Hashtags":"#️⃣ هاشتاغات مناسبة",
+ "📈 Video Growth Ideas":"📈 أفكار لزيادة المشاهدات",
+ "💡 Give Me Ideas":"💡 أعطني أفكارًا جديدة",
+ "🎮 Gaming Ideas":"🎮 أفكار محتوى ألعاب",
+ "📦 Unboxing Ideas":"📦 أفكار فتح صناديق",
+ "⚡ Shorts Ideas":"⚡ أفكار للشورتس",
+ "🔥 Trending Concepts":"🔥 أفكار عصرية للمحتوى"
+ };
+ return map[s]||s;
+}
+function changeLanguage(v){lang=v;localStorage.setItem("rmc_lang",lang);applyLanguage();renderSettings()}
+function saveSettings(){
+ settings.username=$("#username").value.trim()||"RMC Creator";
+ localStorage.setItem("rmc_settings",JSON.stringify(settings)); applyLanguage();
+ const b=document.querySelector(".setting-card .btn"); if(b){b.innerHTML="✓ "+t("saved");setTimeout(()=>b.innerHTML="✓ "+t("save"),900)}
+}
+function resetSettings(){localStorage.removeItem("rmc_settings");location.reload()}
+function clearHistory(){localStorage.removeItem("rmc_history");alert(lang==="ar"?"تم مسح السجل المحلي.":"Local history cleared.")}
+function applyTheme(){document.body.dataset.theme=settings.theme}
+function applyCompact(){document.body.classList.toggle("compact",!!settings.compact)}
+function openTool(page,specific){
+ renderPage(page,specific);
+ if(!specific){
+   $("#mtitle").textContent=categories.find(c=>c[0]===page)?.[2]||"AI Tool";
+   $("#mbody").innerHTML=`
+   <div class="field"><label>Tell RMC what you want</label>
+   <textarea id="idea" placeholder="Write your idea here..."></textarea></div>
+   <div class="chips"><span class="chip">Arabic</span><span class="chip">English</span><span class="chip">Creative</span><span class="chip">Professional</span></div>
+   <button class="btn" style="margin-top:15px" onclick="generate('${page}')">Generate ✦</button>
+   <div class="output" id="out">Your generated result will appear here.</div>`;
+   $("#modal").classList.add("show");
+ } else {
+   $("#mtitle").textContent=specific;
+   $("#mbody").innerHTML=`
+   <div class="field"><label>Your idea</label>
+   <textarea id="idea" placeholder="Example: I want to make a video about..."></textarea></div>
+   <div class="chips"><span class="chip">Arabic</span><span class="chip">English</span><span class="chip">Creative</span><span class="chip">Professional</span></div>
+   <button class="btn" style="margin-top:15px" onclick="generate('${page}')">Generate ✦</button>
+   <div class="output" id="out">Tell me your idea and I'll build the first draft.</div>`;
+   $("#modal").classList.add("show");
+ }
+}
+
+function generate(page){
+ const x=$("#idea").value.trim()||"a new creator project";
+ const templates={
+ youtube:`TITLE OPTIONS\n1. ${x} — You Won't Believe What Happened!\n2. I Tried ${x}... Here's What Happened\n3. ${x} | The Start of Something BIG\n\nDESCRIPTION\nToday I'm testing ${x}. Watch until the end for the result.\n\nCTA\nSubscribe for the next episode and tell me what I should try next.`,
+ content:`IDEA 1 — Challenge: ${x} with a surprising twist.\nIDEA 2 — Behind the scenes: how ${x} actually works.\nIDEA 3 — Beginner vs Pro: compare both approaches.\nIDEA 4 — 30-day experiment built around ${x}.\nIDEA 5 — The mistake everyone makes with ${x}.`,
+ script:`HOOK (0–5s)\n"What if ${x} turns out completely different than expected?"\n\nSETUP\nQuickly explain the goal and why viewers should care.\n\nMAIN\nBuild the story in 3 escalating moments. Add a payoff before the ending.\n\nENDING\nReveal the result, then tease the next video.`,
+ thumb:`THUMBNAIL CONCEPT\nMain subject: ${x}\nComposition: subject large on one side, clear focal point, dark background.\nText: 2–4 powerful words, maximum readability.\nStyle: realistic, clean, blue/black cinematic lighting, no clutter.\n\nTEXT OPTIONS: "I DID IT" · "WHAT?!" · "FINALLY"`,
+ image:`IMAGE PROMPT\nCreate a high-quality cinematic visual based on: ${x}.\nUse realistic lighting, strong composition, deep blue/black accents, detailed subject, clean background, professional creator aesthetic.`,
+ video:`VIDEO PLAN\n0–3s: strongest hook for ${x}\n3–8s: establish the situation\n8–20s: fastest/highest-value moments\n20–27s: payoff or reveal\n27–30s: short CTA\n\nEDITING: quick cuts, readable captions, remove dead air.`,
+ audio:`VOICE-OVER\n"Today we're talking about ${x}. Let's get straight into it. First, here's what matters... [main point]. And here's the part you probably didn't expect... [payoff]."`,
+ chat:`AI BRAINSTORM\nI’d approach "${x}" from three angles: audience value, uniqueness, and monetization.\n\nNEXT MOVE\nTurn the strongest angle into a small test before spending money building the full version.`,
+ seo:`SEO PACK\nPrimary topic: ${x}\nSearch intent: informational + discovery\nTitle keyword direction: ${x} for beginners\nDescription keywords: ${x}, guide, tips, tutorial, best, 2026\n\nHashtags: #${x.replace(/[^a-zA-Z0-9]+/g,"").toLowerCase()} #creator #gaming #youtube`,
+ productivity:`PROJECT ROADMAP\n1. Define the exact result for: ${x}\n2. Build the smallest usable version.\n3. Test it with 3–5 people.\n4. Fix the biggest problem.\n5. Publish a public version.\n6. Measure clicks, usage and retention.\n7. Improve based on evidence.`,
+ learn:`LEARNING PATH — ${x}\nLevel 1: understand the basics.\nLevel 2: copy a small real project.\nLevel 3: build your own version.\nLevel 4: fix weaknesses through feedback.\nLevel 5: publish the result as a portfolio project.`
+ };
+ const result=templates[page]||templates.chat;
+ $("#out").textContent=result;
+ if(settings.history){
+   const hist=JSON.parse(localStorage.getItem("rmc_history")||"[]");
+   hist.unshift({page,idea:x,result,time:new Date().toISOString()});
+   localStorage.setItem("rmc_history",JSON.stringify(hist.slice(0,50)));
+ }
+}
+function closeModal(){$("#modal").classList.remove("show")}
+function quickGenerate(){openTool("content","AI Creator Idea Lab"); setTimeout(()=>{$("#idea").value=$("#quick").value||"a new creator project";generate("content")},50)}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>{
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+ b.classList.add("active");
+ renderPage(b.dataset.page);
+}));
+applyLanguage();
+renderPage(settings.startup||"content");
+</script>
+</body>
+</html>
